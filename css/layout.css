@@ -1,0 +1,178 @@
+/* ===========================================================
+   ATELIER — layout.css
+   Header / overlay nav / footer / section scaffolding
+   =========================================================== */
+
+section { position: relative; }
+
+.section-pad { padding-block: var(--section-pad); }
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--gap);
+  margin-bottom: clamp(2.5rem, 2rem + 2vw, 4.5rem);
+}
+.section-head h2 { font-size: var(--fs-2xl); max-width: 14ch; }
+.section-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  opacity: 0.55;
+}
+
+/* ---------------- header ---------------- */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.1rem, 1rem + 0.5vw, 1.6rem) var(--edge);
+  mix-blend-mode: normal;
+  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+.site-header.is-scrolled {
+  background: rgba(246, 243, 236, 0.82);
+  backdrop-filter: blur(10px) saturate(1.1);
+  border-color: var(--line);
+}
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+.brand span { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.14em; color: var(--clay); text-transform: uppercase; }
+
+.menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  z-index: 700;
+  position: relative;
+}
+.menu-btn .bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 22px;
+}
+.menu-btn .bars span {
+  height: 1px;
+  background: currentColor;
+  transition: transform 0.4s var(--ease), opacity 0.3s ease;
+}
+body.nav-open .menu-btn .bars span:nth-child(1) { transform: translateY(2.5px) rotate(45deg); }
+body.nav-open .menu-btn .bars span:nth-child(2) { opacity: 0; }
+body.nav-open .menu-btn .bars span:nth-child(3) { transform: translateY(-2.5px) rotate(-45deg); }
+
+/* ---------------- full-screen overlay nav ---------------- */
+.site-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: var(--ink-bg);
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(5.5rem, 5rem + 2vw, 7rem) var(--edge) var(--edge);
+  clip-path: circle(2% at calc(100% - 3rem) 3rem);
+  transition: clip-path 0.75s var(--ease);
+  visibility: hidden;
+}
+body.nav-open .site-nav {
+  clip-path: circle(150% at calc(100% - 3rem) 3rem);
+  visibility: visible;
+}
+.site-nav .nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+.site-nav .nav-links a {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 2rem + 4vw, 5.2rem);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease), color 0.3s ease;
+}
+body.nav-open .site-nav .nav-links a {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--i, 0) * 70ms + 150ms);
+}
+.site-nav .nav-links a:hover,
+.site-nav .nav-links a:focus-visible { color: var(--clay); }
+.site-nav .nav-links a .n {
+  font-family: var(--font-mono);
+  font-size: 0.28em;
+  color: var(--sage);
+  letter-spacing: 0.1em;
+}
+.site-nav .nav-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-top: 1px solid var(--ink-line);
+  padding-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  color: rgba(246, 243, 236, 0.6);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.5s;
+}
+body.nav-open .nav-foot { opacity: 1; }
+.nav-foot a { text-decoration: underline; text-underline-offset: 3px; color: var(--paper); }
+
+/* ---------------- dark section wrapper (used by tour teaser + contact) ---------------- */
+.dark-section {
+  background: var(--ink-bg);
+  color: var(--paper);
+}
+.dark-section .eyebrow { color: var(--sage); }
+.dark-section .eyebrow::before { background: var(--sage); }
+
+/* ---------------- footer ---------------- */
+.site-footer {
+  background: var(--ink-bg);
+  color: rgba(246, 243, 236, 0.72);
+  padding-block: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+  border-top: 1px solid var(--ink-line);
+}
+.footer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+}
+.footer-grid .brand { color: var(--paper); }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-links a { border-bottom: 1px solid transparent; transition: border-color 0.25s ease; }
+.footer-links a:hover { border-color: currentColor; }
+
+@media (max-width: 720px) {
+  .site-nav .nav-links a { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+}

@@ -1,0 +1,201 @@
+/* ===========================================================
+   ATELIER — base.css
+   Reset, design tokens, typography, global textures
+   =========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* --- color: warm architectural neutrals + two accents --- */
+  --ink: #1a1712;
+  --ink-soft: #4a453c;
+  --paper: #f6f3ec;
+  --paper-dim: #eee9de;
+  --surface: #ffffff;
+  --line: rgba(26, 23, 18, 0.12);
+  --line-strong: rgba(26, 23, 18, 0.22);
+  --clay: #b4502c;
+  --clay-dim: #8f3f22;
+  --sage: #5c6b4f;
+  --sage-dim: #48543e;
+  --cream: #f6f3ec;
+
+  /* --- inverted (dark section) palette --- */
+  --ink-bg: #171310;
+  --ink-bg-alt: #221c16;
+  --ink-line: rgba(246, 243, 236, 0.14);
+
+  /* --- type --- */
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* --- fluid type scale --- */
+  --fs-xs: clamp(0.72rem, 0.68rem + 0.15vw, 0.8rem);
+  --fs-sm: clamp(0.85rem, 0.8rem + 0.2vw, 0.95rem);
+  --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --fs-lg: clamp(1.2rem, 1.1rem + 0.4vw, 1.5rem);
+  --fs-xl: clamp(1.7rem, 1.4rem + 1.2vw, 2.4rem);
+  --fs-2xl: clamp(2.4rem, 1.9rem + 2.2vw, 3.6rem);
+  --fs-hero: clamp(3rem, 2rem + 5.2vw, 7.2rem);
+
+  /* --- spacing / rhythm --- */
+  --gap: clamp(1.25rem, 1rem + 1vw, 2rem);
+  --section-pad: clamp(4.5rem, 3.5rem + 4vw, 9rem);
+  --container: 1360px;
+  --edge: clamp(1.25rem, 4vw, 4rem);
+
+  /* --- misc --- */
+  --radius-s: 4px;
+  --radius-m: 10px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.6s;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* film-grain overlay — the quiet "expensive paper" texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img, video { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+em, .italic { font-style: italic; font-weight: 400; }
+
+p { margin: 0; }
+
+ul { margin: 0; padding: 0; list-style: none; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+
+input, textarea {
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--edge);
+}
+
+/* eyebrow / mono label used everywhere as a signature micro-detail */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+.eyebrow::before {
+  content: '';
+  width: 1.4em;
+  height: 1px;
+  background: currentColor;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* scroll-reveal primitive (activated by reveal.js via IntersectionObserver) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-stagger > * {
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* custom cursor (desktop, fine-pointer only — see cursor.js) */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 1000;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--clay);
+  transition: opacity 0.2s ease;
+}
+.cursor-ring {
+  width: 40px; height: 40px;
+  border: 1px solid var(--line-strong);
+  transition: width 0.25s var(--ease), height 0.25s var(--ease), border-color 0.25s ease, opacity 0.2s ease;
+}
+body.has-cursor { cursor: none; }
+body.has-cursor a, body.has-cursor button { cursor: none; }
+.cursor-ring.is-active {
+  width: 70px; height: 70px;
+  border-color: var(--clay);
+}
