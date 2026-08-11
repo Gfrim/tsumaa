@@ -2,6 +2,7 @@
 (function () {
   var header = document.querySelector('.site-header');
   var menuBtn = document.querySelector('.menu-btn');
+  var menuLabel = menuBtn ? menuBtn.querySelector('.label') : null;
   var nav = document.querySelector('.site-nav');
   var navLinks = document.querySelectorAll('.site-nav .nav-links a');
 
@@ -18,11 +19,19 @@
 
   function closeNav() {
     document.body.classList.remove('nav-open');
-    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    if (menuBtn) {
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuBtn.setAttribute('aria-label', 'Menu');
+    }
+    if (menuLabel) menuLabel.textContent = 'Menu';
   }
   function openNav() {
     document.body.classList.add('nav-open');
-    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+    if (menuBtn) {
+      menuBtn.setAttribute('aria-expanded', 'true');
+      menuBtn.setAttribute('aria-label', 'Close menu');
+    }
+    if (menuLabel) menuLabel.textContent = 'Close';
   }
 
   if (menuBtn && nav) {

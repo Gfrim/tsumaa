@@ -27,19 +27,28 @@ section { position: relative; }
 .site-header {
   position: fixed;
   inset: 0 0 auto 0;
-  z-index: 500;
+  z-index: 700;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: clamp(1.1rem, 1rem + 0.5vw, 1.6rem) var(--edge);
   mix-blend-mode: normal;
-  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease), color 0.4s ease;
   border-bottom: 1px solid transparent;
 }
 .site-header.is-scrolled {
   background: rgba(246, 243, 236, 0.82);
   backdrop-filter: blur(10px) saturate(1.1);
   border-color: var(--line);
+}
+/* header floats above the full-screen nav once it's open — force it
+   transparent/light-on-dark regardless of scroll state so it reads
+   as one continuous panel with the overlay beneath it */
+body.nav-open .site-header {
+  background: transparent;
+  backdrop-filter: none;
+  border-color: transparent;
+  color: var(--paper);
 }
 .brand {
   font-family: var(--font-display);
@@ -48,34 +57,58 @@ section { position: relative; }
   display: flex;
   align-items: baseline;
   gap: 0.4em;
+  transition: opacity 0.3s ease;
 }
 .brand span { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.14em; color: var(--clay); text-transform: uppercase; }
+body.nav-open .brand { opacity: 0; pointer-events: none; }
 
 .menu-btn {
   display: flex;
   align-items: center;
-  gap: 0.7em;
+  gap: 0.85em;
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   z-index: 700;
   position: relative;
+  margin: -0.75rem -0.5rem -0.75rem 0;
+  padding: 0.75rem 0.5rem;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 999px;
+  transition: background-color 0.3s ease;
+}
+.menu-btn:hover,
+.menu-btn:focus-visible {
+  background: rgba(26, 23, 18, 0.06);
+}
+body.nav-open .menu-btn:hover,
+body.nav-open .menu-btn:focus-visible {
+  background: rgba(246, 243, 236, 0.12);
 }
 .menu-btn .bars {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 4px;
+  position: relative;
   width: 22px;
+  height: 14px;
+  flex-shrink: 0;
 }
 .menu-btn .bars span {
-  height: 1px;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 1px;
   background: currentColor;
-  transition: transform 0.4s var(--ease), opacity 0.3s ease;
+  transition: top 0.3s var(--ease), transform 0.35s var(--ease), opacity 0.2s ease;
 }
-body.nav-open .menu-btn .bars span:nth-child(1) { transform: translateY(2.5px) rotate(45deg); }
+.menu-btn .bars span:nth-child(1) { top: 0; }
+.menu-btn .bars span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.menu-btn .bars span:nth-child(3) { top: 100%; transform: translateY(-100%); }
+
+body.nav-open .menu-btn .bars span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
 body.nav-open .menu-btn .bars span:nth-child(2) { opacity: 0; }
-body.nav-open .menu-btn .bars span:nth-child(3) { transform: translateY(-2.5px) rotate(-45deg); }
+body.nav-open .menu-btn .bars span:nth-child(3) { top: 50%; transform: translateY(-50%) rotate(-45deg); }
+body.nav-open .menu-btn { color: var(--paper); }
 
 /* ---------------- full-screen overlay nav ---------------- */
 .site-nav {
@@ -87,10 +120,13 @@ body.nav-open .menu-btn .bars span:nth-child(3) { transform: translateY(-2.5px) 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 2rem;
   padding: clamp(5.5rem, 5rem + 2vw, 7rem) var(--edge) var(--edge);
   clip-path: circle(2% at calc(100% - 3rem) 3rem);
   transition: clip-path 0.75s var(--ease);
   visibility: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 body.nav-open .site-nav {
   clip-path: circle(150% at calc(100% - 3rem) 3rem);
@@ -175,4 +211,10 @@ body.nav-open .nav-foot { opacity: 1; }
 
 @media (max-width: 720px) {
   .site-nav .nav-links a { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+}
+
+@media (max-height: 700px) {
+  .site-nav { padding-top: 4.5rem; padding-bottom: 1.5rem; gap: 1.25rem; }
+  .site-nav .nav-links { gap: 0; }
+  .site-nav .nav-links a { font-size: clamp(1.7rem, 7vw, 2.6rem); }
 }

@@ -6,17 +6,26 @@
 
   var dot = document.createElement('div');
   dot.className = 'cursor-dot';
+  dot.style.opacity = '0';
   var ring = document.createElement('div');
   ring.className = 'cursor-ring';
+  ring.style.opacity = '0';
   document.body.appendChild(dot);
   document.body.appendChild(ring);
 
   var x = 0, y = 0, rx = 0, ry = 0;
+  var hasMoved = false;
 
   window.addEventListener('mousemove', function (e) {
     x = e.clientX;
     y = e.clientY;
     dot.style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-50%,-50%)';
+    if (!hasMoved) {
+      hasMoved = true;
+      rx = x; ry = y;
+      dot.style.opacity = '';
+      ring.style.opacity = '';
+    }
   });
 
   function loop() {
