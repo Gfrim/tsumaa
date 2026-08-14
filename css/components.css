@@ -26,14 +26,32 @@
 .dark-section .btn-ghost:hover { background: var(--paper); color: var(--ink-bg); }
 .btn svg { width: 1em; height: 1em; }
 
-/* ---------------- hero ---------------- */
+/* ---------------- hero (split visual / content) ---------------- */
 .hero {
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
+  position: relative;
+}
+.hero-visual {
+  width: 100%;
+  height: 46vh;
+  min-height: 340px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--paper-dim);
+}
+.hero-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: clamp(6rem, 5rem + 3vw, 8rem);
-  position: relative;
+  padding: clamp(2.5rem, 2rem + 2vw, 4rem) var(--edge) clamp(3rem, 2.5rem + 2vw, 5rem);
 }
 .hero-eyebrow-row {
   display: flex;
@@ -42,12 +60,12 @@
   margin-bottom: 1.4rem;
 }
 .hero h1 {
-  font-size: var(--fs-hero);
-  max-width: 15ch;
+  font-size: clamp(2.6rem, 2.1rem + 4.5vw, 4.6rem);
+  max-width: 12ch;
 }
 .hero h1 .line { display: block; }
 .hero-sub {
-  max-width: 46ch;
+  max-width: 44ch;
   margin-top: 1.6rem;
   font-size: var(--fs-lg);
   color: var(--ink-soft);
@@ -57,6 +75,16 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: clamp(2rem, 1.6rem + 1.5vw, 3rem);
+}
+
+@media (min-width: 900px) {
+  .hero { flex-direction: row; align-items: stretch; }
+  .hero-visual { width: 56%; height: auto; min-height: 100svh; }
+  .hero-content {
+    width: 44%;
+    padding: clamp(7rem, 6rem + 2vw, 9rem) clamp(2.5rem, 2rem + 2vw, 4rem) clamp(3rem, 2.5rem + 2vw, 4rem);
+  }
+  .hero h1 { max-width: 10ch; }
 }
 
 /* discipline marquee ribbon */
